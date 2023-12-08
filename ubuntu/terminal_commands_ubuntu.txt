@@ -1,0 +1,66 @@
+1.
+cat > Домашние_животные
+собаки
+кошки
+хомяки
+
+
+cat > Вьючные_животные
+лошади
+верблюды
+ослы
+
+
+cat Домашние_животные Вьючные_животные > Друзья_человек
+
+
+cat Друзья_человека
+собаки
+кошки
+хомяки
+лошади
+верблюды
+ослы
+
+
+mv Друзья_человека Новые_друзья
+
+
+2.
+mkdir Животные
+mv Новые_друзья Животные/
+
+
+3.
+wget -O /tmp/RPM-GPG-KEY-mysql https://repo.mysql.com/RPM-GPG-KEY-mysql
+sudo rpm --import /tmp/RPM-GPG-KEY-mysql
+
+sudo vi /etc/yum.repos.d/mysql.repo
+[mysql]
+name=MySQL Community Server
+baseurl=https://repo.mysql.com/yum/mysql-8.0-community/el/7/$basearch/
+enabled=1
+gpgcheck=1
+gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-mys
+
+
+sudo yum update
+
+
+sudo yum install mysql-community-server
+
+
+4.
+wget https://example.com/package.deb
+
+
+sudo dpkg -i package.deb
+
+
+sudo apt-get install -f
+
+
+dpkg -l | grep pack
+
+
+sudo dpkg -r package
