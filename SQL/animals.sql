@@ -43,7 +43,7 @@ VALUES ('Кошки', 2), ('Собаки', 2), ('Хомяки', 2);
 CREATE TABLE
     cats (
         Id INT AUTO_INCREMENT PRIMARY KEY,
-        Name VARCHAR(20),
+        name VARCHAR(20),
         birthdate DATE,
         command VARCHAR(50),
         genus_id int,
@@ -54,7 +54,7 @@ CREATE TABLE
 
 INSERT INTO
     cats (
-        Name,
+        name,
         birthdate,
         command,
         genus_id
@@ -74,7 +74,7 @@ VALUES (
 CREATE TABLE
     dogs (
         Id INT AUTO_INCREMENT PRIMARY KEY,
-        Name VARCHAR(20),
+        name VARCHAR(20),
         birthday DATE,
         command VARCHAR(50),
         genus_id int,
@@ -83,7 +83,7 @@ CREATE TABLE
 
 INSERT INTO
     dogs (
-        Name,
+        name,
         birthday,
         command,
         genus_id
@@ -113,7 +113,7 @@ VALUES (
 CREATE TABLE
     hamsters (
         Id INT AUTO_INCREMENT PRIMARY KEY,
-        Name VARCHAR(20),
+        name VARCHAR(20),
         birthday DATE,
         command VARCHAR(40),
         genus_id int,
@@ -122,7 +122,7 @@ CREATE TABLE
 
 INSERT INTO
     hamsters (
-        Name,
+        name,
         birthday,
         command,
         genus_id
@@ -137,7 +137,7 @@ VALUES ('Хома', '2021-10-12', NULL, 3), (
 CREATE TABLE
     horses (
         Id INT AUTO_INCREMENT PRIMARY KEY,
-        Name VARCHAR(20),
+        name VARCHAR(20),
         birthday DATE,
         command VARCHAR(40),
         genus_id int,
@@ -146,7 +146,7 @@ CREATE TABLE
 
 INSERT INTO
     horses (
-        Name,
+        name,
         birthday,
         command,
         genus_id
@@ -176,7 +176,7 @@ VALUES (
 CREATE TABLE
     donkeys (
         Id INT AUTO_INCREMENT PRIMARY KEY,
-        Name VARCHAR(20),
+        name VARCHAR(20),
         birthday DATE,
         command VARCHAR(40),
         genus_id int,
@@ -185,7 +185,7 @@ CREATE TABLE
 
 INSERT INTO
     donkeys (
-        Name,
+        name,
         birthday,
         command,
         genus_id
@@ -195,7 +195,7 @@ VALUES ('Тарзан', '2019-04-10', NULL, 2), ('Боря', '2020-03-12', NULL,
 CREATE TABLE
     camels (
         Id INT AUTO_INCREMENT PRIMARY KEY,
-        Name VARCHAR(20),
+        name VARCHAR(20),
         birthday DATE,
         command VARCHAR(40),
         genus_id int,
@@ -204,7 +204,7 @@ CREATE TABLE
 
 INSERT INTO
     camels (
-        Name,
+        name,
         birthday,
         command,
         genus_id
@@ -231,33 +231,100 @@ VALUES (
 DELETE FROM camels;
 
 SELECT
-    Name,
+    name,
     birthdate,
     command
 FROM horses
 UNION
 SELECT
-    Name,
+    name,
     bitthdate,
     command
 FROM donkeys;
 
--- 11. Объединить все таблицы в одну, при этом сохраняя поля, указывающие на прошлую принадлежность к старым таблицам.
+-- 11. Создать новую таблицу “молодые животные” в которую попадут все животные старше 1 года, но младше 3 лет и в отдельном столбце
+-- с точностью до месяца подсчитать возраст животных в новой таблице
 
-SELECT ID, Name, birthdate, command, 'Cat' AS TableType, 'Cat' AS AnimalType
+CREATE TABLE
+    young_animals (
+        Id INT AUTO_INCREMENT PRIMARY KEY,
+        name VARCHAR(20),
+        birthdate DATE,
+        command VARCHAR(40),
+        age_months int
+    );
+
+INSERT INTO
+    young_animals (
+        id,
+        name,
+        bithdate,
+        command,
+        age_months 
+    )
+SELECT
+    id,
+    name,
+    birthdate,
+    command,
+    TIMESTAMPDIFF(MONTH, birthdate, NOW()) AS age_months
+FROM animals
+WHERE
+    TIMESTAMPDIFF(YEAR, birthdate, NOW()) > 1
+    AND TIMESTAMPDIFF(YEAR, birthdate, NOW()) < 3;
+
+-- 12. Объединить все таблицы в одну, при этом сохраняя поля, указывающие на прошлую принадлежность к старым таблицам.
+
+SELECT
+    id,
+    name,
+    birthdate,
+    command,
+    'cats' AS table_type,
+    'cat' AS animal_type
 FROM cats
 UNION
-SELECT ID, Name, birhdate, command, 'Dog' AS TableType, 'Dog' AS AnimalType
+SELECT
+    id,
+    name,
+    birhdate,
+    command,
+    'dogs' AS table_type,
+    'dog' AS animal_type
 FROM dogs
 UNION
-SELECT ID, Name, birthdate, command, 'Hamster' AS TableType, 'Hamster' AS AnimalType
+SELECT
+    id,
+    name,
+    birthdate,
+    command,
+    'hamsters' AS table_type,
+    'hamster' AS animal_type
 FROM hamsters
 UNION
-SELECT ID, Name, birthdate, command, 'Horse' AS TableType, 'Horse' AS AnimalType
+SELECT
+    id,
+    name,
+    birthdate,
+    command,
+    'horses' AS table_type,
+    'horse' AS animal_type
 FROM horses
 UNION
-SELECT ID, Name, birthdate, command, 'Donkey' AS TableType, 'Donkey' AS AnimalType
+SELECT
+    id,
+    name,
+    birthdate,
+    command,
+    'donkeys' AS table_type,
+    'donkey' AS animal_type
 FROM donkeys
 UNION
-SELECT ID, Name, birthdate, command, 'Camel' AS TableType, 'Camel' AS AnimalType
+SELECT
+    id,
+    name,
+    birthdate,
+    command,
+    'camels' AS table_type,
+    'camel' AS animal_type
 FROM camels
